@@ -106,3 +106,22 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("User data not available. Make sure you're running inside Telegram Mini App.");
     }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    // بررسی کن که آیا در مینی‌اپ تلگرام باز شده یا نه
+    if (window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // نمایش تمام صفحه
+
+        const userData = tg.initDataUnsafe; // دریافت اطلاعات کاربر
+
+        if (userData && userData.user) {
+            const userName = userData.user.first_name || "کاربر ناشناس";
+            document.getElementById("user-name").innerText = `👤 خوش آمدی، ${userName}!`;
+        } else {
+            document.getElementById("user-name").innerText = "❌ خطا در دریافت اطلاعات کاربر!";
+        }
+    } else {
+        document.getElementById("user-name").innerText = "❌ لطفا این بازی را در تلگرام باز کنید!";
+    }
+});
