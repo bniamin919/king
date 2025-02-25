@@ -1,3 +1,4 @@
+console.log("✅ Script.js loaded!");
 const body = document.body;
 const image = body.querySelector('#coin');
 const h1 = body.querySelector('h1');
