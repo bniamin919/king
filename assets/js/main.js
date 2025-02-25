@@ -1,7 +1,7 @@
-// Supabase Setup
-const supabaseUrl = "https://eoiqwqzvsdnqlmotebrg.supabase.co"; // مقدار واقعی را جایگزین کن
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvaXF3cXp2c2RucWxtb3RlYnJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1MTMyNzIsImV4cCI6MjA1NjA4OTI3Mn0.hGUv9suBPrqf6_kWYlCFhx2je_h57Agz0B-_6ODFXKo"; // مقدار واقعی را جایگزین کن
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// Supabase Setu
+const supabaseUrl = "YOUR_SUPABASE_URL"; // مقدار واقعی را جایگزین کن
+const supabaseKey = "YOUR_SUPABASE_KEY"; // مقدار واقعی را جایگزین کن
+const supabase = createClient(supabaseUrl, supabaseKey); // اصلاح این خط
 
 // دریافت اطلاعات کاربر از مینی‌اپ تلگرام
 const tg = window.Telegram.WebApp;
@@ -9,6 +9,7 @@ tg.expand(); // باز کردن تمام صفحه مینی‌اپ
 
 // مقداردهی userId از اطلاعات تلگرام
 const userId = tg.initDataUnsafe?.user?.id;
+console.log("userId:", userId);  // چاپ شناسه تلگرام برای بررسی
 
 if (!userId) {
     console.error("❌ Telegram user ID not found!");
@@ -19,6 +20,12 @@ if (!userId) {
 // انتخاب عناصر HTML
 const coinDisplay = document.querySelector("#coin-display");
 const coinButton = document.querySelector("#coin");
+
+if (!coinDisplay || !coinButton) {
+    console.error("❌ عناصر HTML پیدا نشدند!");
+} else {
+    console.log("✅ عناصر HTML پیدا شدند!");
+}
 
 // دریافت مقدار سکه‌های کاربر از دیتابیس
 async function fetchCoins() {
@@ -35,6 +42,7 @@ async function fetchCoins() {
         return;
     }
     
+    console.log("✅ سکه‌های کاربر از Supabase:", data.coins);  // چاپ تعداد سکه‌ها
     coinDisplay.textContent = data.coins;
 }
 
@@ -56,6 +64,8 @@ async function addCoin() {
     
     if (error) {
         console.error("❌ Error updating coins:", error);
+    } else {
+        console.log("✅ سکه‌ها به دیتابیس بروزرسانی شدند.");
     }
 }
 
