@@ -1,6 +1,6 @@
 // Supabase Setu
-const supabaseUrl = "YOUR_SUPABASE_URL"; // مقدار واقعی را جایگزین کن
-const supabaseKey = "YOUR_SUPABASE_KEY"; // مقدار واقعی را جایگزین کن
+const supabaseUrl = "https://eoiqwqzvsdnqlmotebrg.supabase.co"; // مقدار واقعی را جایگزین کن
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvaXF3cXp2c2RucWxtb3RlYnJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA1MTMyNzIsImV4cCI6MjA1NjA4OTI3Mn0.hGUv9suBPrqf6_kWYlCFhx2je_h57Agz0B-_6ODFXKo"; // مقدار واقعی را جایگزین کن
 const supabase = createClient(supabaseUrl, supabaseKey); // اصلاح این خط
 
 // دریافت اطلاعات کاربر از مینی‌اپ تلگرام
