@@ -11,96 +11,62 @@ const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 // دریافت اطلاعات کاربر از تلگرام
 let userId = Telegram.WebApp.initDataUnsafe?.user?.id?.toString() || "test_user";
 
-// تابع دریافت سکه‌های کاربر از دیتابیس
-async function getCoins(userId) {
+// مقدار اولیه سکه‌ها از دیتابیس
+async function getCoins() {
     let { data, error } = await supabase
         .from("users")
         .select("coins")
         .eq("id", userId)
         .single();
 
-    if (error) {
+    if (error || !data) {
         console.log("User not found, creating new record...");
         await supabase.from("users").insert([{ id: userId, coins: 0 }]);
         return 0;
     }
-
     return data.coins;
 }
 
-// تابع ذخیره سکه‌های جدید در دیتابیس
-async function updateCoins(userId, newCoins) {
+// ذخیره سکه‌های جدید در دیتابیس
+async function updateCoins(newCoins) {
     await supabase
         .from("users")
         .upsert([{ id: userId, coins: newCoins }]);
 }
 
-let coins = localStorage.getItem('coins');
-let total = localStorage.getItem('total');
-let power = localStorage.getItem('power');
-let count = localStorage.getItem('count')
-
-if(coins == null){
-    localStorage.setItem('coins' , '0');
-    h1.textContent = '0';
-}else{
-    h1.textContent = Number(coins).toLocaleString();
+// مقدار سکه را از دیتابیس بگیر و نمایش بده
+async function initializeCoins() {
+    let coins = await getCoins();
+    h1.textContent = coins.toLocaleString();
 }
 
-if(total == null){
-    localStorage.setItem('total' , '500')
-    body.querySelector('#total').textContent = '/500';
-}else {
-    body.querySelector('#total').textContent = `/${total}`;
-}
+initializeCoins();
 
-if(power == null){
-    localStorage.setItem('power' , '500');
-    body.querySelector('#power').textContent = '500';
-}else{
-    body.querySelector('#power').textContent = power;
-}
-
-if(count == null){
-    localStorage.setItem('count' , '1')
-}
-
-image.addEventListener('click' , async (e)=> {
+image.addEventListener('click', async (e) => {
     let x = e.offsetX;
     let y = e.offsetY;
 
     navigator.vibrate(5);
 
-    coins = await getCoins(userId);
-    power = localStorage.getItem('power');
-    
-    if(Number(power) > 0){
-        coins += 1;
-        await updateCoins(userId, coins);
-        h1.textContent = coins.toLocaleString();
-    
-        localStorage.setItem('power' , `${Number(power) - 1}`);
-        body.querySelector('#power').textContent = `${Number(power) - 1}`;
-    } 
+    let coins = await getCoins();
+    coins += 1;
 
-    if(x < 150 & y < 150){
+    await updateCoins(coins);
+    h1.textContent = coins.toLocaleString();
+
+    if (x < 150 & y < 150) {
         image.style.transform = 'translate(-0.25rem, -0.25rem) skewY(-10deg) skewX(5deg)';
-    }
-    else if (x < 150 & y > 150){
+    } else if (x < 150 & y > 150) {
         image.style.transform = 'translate(-0.25rem, 0.25rem) skewY(-10deg) skewX(5deg)';
-    }
-    else if (x > 150 & y > 150){
+    } else if (x > 150 & y > 150) {
         image.style.transform = 'translate(0.25rem, 0.25rem) skewY(10deg) skewX(-5deg)';
-    }
-    else if (x > 150 & y < 150){
+    } else if (x > 150 & y < 150) {
         image.style.transform = 'translate(0.25rem, -0.25rem) skewY(10deg) skewX(-5deg)';
     }
 
-    setTimeout(()=>{
+    setTimeout(() => {
         image.style.transform = 'translate(0px, 0px)';
     }, 100);
-
-    body.querySelector('.progress').style.width = `${(100 * power) / total}%`;
 });
 
 document.addEventListener("DOMContentLoaded", function () {
