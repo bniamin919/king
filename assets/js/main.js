@@ -83,3 +83,26 @@ setInterval(()=> {
         body.querySelector('.progress').style.width = `${(100 * power) / total}%`;
     }
 }, 1000);
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    window.Telegram.WebApp.expand(); // نمایش تمام صفحه
+
+    const tg = window.Telegram.WebApp;
+    const userData = tg.initDataUnsafe; // دریافت اطلاعات کاربر
+
+    if (userData && userData.user) {
+        console.log("User ID:", userData.user.id);
+        console.log("Username:", userData.user.username);
+        console.log("First Name:", userData.user.first_name);
+        console.log("Last Name:", userData.user.last_name || "N/A");
+
+        // نمایش اطلاعات کاربر در صفحه (اگر بخوای)
+        const userInfoElement = document.getElementById("userInfo");
+        if (userInfoElement) {
+            userInfoElement.innerText = `👤 ${userData.user.first_name} (@${userData.user.username || "No username"})`;
+        }
+    } else {
+        console.log("User data not available. Make sure you're running inside Telegram Mini App.");
+    }
+});
