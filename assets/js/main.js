@@ -1,8 +1,8 @@
-// اتصال به Supabase با امنیت بیشتر (باید مقدار کلید را در سرور نگه داشت)
+// اتصال به Supabase
 const supabaseUrl = "https://eoiqwqzvsdnqlmotebrg.supabase.co";
-const supabase = createClient(supabaseUrl, "PUBLIC_ANON_KEY"); // مقدار کلید را از سرور دریافت کنید
+const supabase = createClient(supabaseUrl, "PUBLIC_ANON_KEY"); 
 
-// دریافت اطلاعات کاربر از مینی‌اپ تلگرام
+// دریافت اطلاعات کاربر از تلگرام
 const tg = window.Telegram.WebApp;
 tg.expand();
 const userId = tg.initDataUnsafe?.user?.id;
@@ -13,9 +13,9 @@ if (!userId) {
     console.log("✅ Telegram user ID:", userId);
 }
 
-// انتخاب عنصر صحیح برای نمایش سکه‌ها
-const coinDisplay = document.querySelector(".coin-count-container h1");
-const coinButton = document.querySelector("#coin");
+// انتخاب عناصر درست
+const coinDisplay = document.querySelector("#coin-display"); // مقدار سکه‌ها
+const coinButton = document.querySelector("#coin"); // عکس سکه
 
 if (!coinDisplay || !coinButton) {
     console.error("❌ عناصر HTML پیدا نشدند!");
@@ -23,7 +23,7 @@ if (!coinDisplay || !coinButton) {
     console.log("✅ عناصر HTML پیدا شدند!");
 }
 
-// دریافت مقدار سکه‌های کاربر از دیتابیس
+// دریافت مقدار سکه از دیتابیس
 async function fetchCoins() {
     if (!userId) return;
 
@@ -40,10 +40,10 @@ async function fetchCoins() {
     }
     
     console.log("✅ سکه‌های کاربر از Supabase:", data.coins);
-    coinDisplay.textContent = data.coins;
+    coinDisplay.textContent = data.coins || "0"; // مقدار پیش‌فرض اضافه شد
 }
 
-// افزایش سکه‌ها هنگام کلیک روی تصویر
+// افزایش سکه‌ها هنگام کلیک
 async function addCoin() {
     if (!userId) return;
 
@@ -60,10 +60,11 @@ async function addCoin() {
         console.error("❌ Error updating coins:", error);
     } else {
         console.log("✅ سکه‌ها به‌روزرسانی شدند.");
+        await fetchCoins(); // مقدار جدید را بعد از بروزرسانی دریافت کن
     }
 }
 
-// اضافه کردن Event Listener برای کلیک روی عکس سکه
+// اضافه کردن کلیک به تصویر سکه
 if (coinButton) {
     coinButton.addEventListener("click", addCoin);
 }
